@@ -1,0 +1,6 @@
+name = "JT58"
+version = "0.1.0"
+defaultTargets = ["JT58"]
+
+[[lean_lib]]
+name = "JT58"
