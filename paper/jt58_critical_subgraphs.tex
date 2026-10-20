@@ -1,0 +1,292 @@
+\documentclass[11pt]{article}
+\usepackage[letterpaper,margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{booktabs,tabularx,array}
+\usepackage[colorlinks=true,linkcolor=black,citecolor=black,urlcolor=blue]{hyperref}
+\hypersetup{
+  pdftitle={A nine-vertex counterexample to Jensen-Toft Problem 5.8},
+  pdfauthor={Alex Chan}}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}{Lemma}
+\newcommand{\out}{N^{+}}
+
+\title{A nine-vertex counterexample to\\Jensen--Toft Problem 5.8}
+\author{Alex Chan\\[2pt]
+  \small Harvard University and National Bureau of Economic Research\\[-1pt]
+  \small \texttt{achan@hbs.edu}}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+We give a negative answer to the question in Jensen and Toft,
+\emph{Graph Coloring Problems}, Section~5.8, asking whether every
+noncomplete $k$-critical graph, for $k\geq4$, contains a noninduced
+$(k-1)$-critical subgraph. The witness is the classical nine-vertex
+5-Ore graph $O_5$. We show that its 4-critical subgraphs are exactly
+three copies of $K_4$ and twelve copies of the Moser spindle, all
+induced. The proof is elementary. A Lean formalization independently
+certifies the counterexample property.
+\end{abstract}
+
+\section{The question}
+
+All graphs are finite and simple. A graph is \emph{$k$-critical} if
+its chromatic number is $k$ and every proper subgraph is
+$(k-1)$-colorable. A subgraph $H$ of $G$ is \emph{induced} if
+$H=G[V(H)]$.
+
+Jensen and Toft~\cite[Section~5.8, p.~103]{JT} ask whether every
+noncomplete $k$-critical graph, for $k\geq4$, contains a
+$(k-1)$-critical subgraph that is not induced. We answer this
+question as stated.
+
+\begin{theorem}\label{thm:main}
+There is a noncomplete 5-critical graph $G$ on nine vertices and
+nineteen edges whose 4-critical subgraphs are exactly fifteen
+induced subgraphs: three copies of $K_4$ and twelve copies of the
+Moser spindle. In particular, $G$ has no noninduced 4-critical
+subgraph.
+\end{theorem}
+
+The host is the classical graph commonly denoted $O_5$.
+We do not claim a new construction of the host graph. Our argument
+describes its 4-critical subgraphs and applies that description
+to the question above.
+
+\section{The graph and its criticality}
+
+Use the vertex set $\{0,\ldots,8\}$, and write
+\[
+ L=\{0,1\},\qquad R=\{4,5\},\qquad
+ Z=\{2,3,7\},\qquad u=6,\qquad v=8.
+\]
+The set $L\cup R$ induces $K_4$, and $Z$ induces $K_3$.
+Both $u$ and $v$ are adjacent to every vertex of $Z$.
+In addition, $u$ is adjacent to every vertex of $R$, and $v$
+to every vertex of $L$. There are no other edges. In particular,
+$uv$ is not an edge.
+
+This is an Ore composition of two copies of $K_5$: delete the edge
+$uv$ from one copy, split a vertex of the other copy into two
+vertices with disjoint two-element neighborhoods, and identify
+the split vertices with $u$ and $v$. The explicit description
+above gives $6+3+6+4=19$ edges.
+
+\begin{lemma}\label{lem:host}
+The graph $G$ is noncomplete and 5-critical.
+\end{lemma}
+
+\begin{proof}
+Suppose that $G$ has a proper four-coloring. The clique $L\cup R$
+uses all four colors. The color of $u$ must occur on $L$, and
+the color of $v$ must occur on $R$. Thus $u$ and $v$ have different
+colors. Every vertex of the triangle $Z$ is adjacent to both,
+leaving only two colors for $Z$, a contradiction.
+
+A proper five-coloring, in vertex order $0,\ldots,8$, is
+\[
+ (0,1,0,1,2,3,4,2,3).
+\]
+It remains to check criticality. Permutations within $L$, within
+$R$, and within $Z$ are automorphisms. Exchanging $L$ with $R$
+and $u$ with $v$ is also an automorphism. These automorphisms
+give five edge orbits, represented by the edges in
+Table~\ref{tab:deletions}. Each row supplies a proper
+four-coloring after deletion of that edge.
+
+\begin{table}[ht]
+\centering
+\small
+\begin{tabular}{cl}
+\toprule
+Deleted edge & Four-coloring in vertex order $0,\ldots,8$\\
+\midrule
+$01$ & $(0,0,3,2,3,2,1,0,1)$\\
+$04$ & $(0,3,3,2,0,2,1,0,1)$\\
+$23$ & $(0,2,0,0,3,1,2,3,1)$\\
+$26$ & $(0,2,0,3,3,1,0,2,1)$\\
+$46$ & $(0,3,3,2,1,2,1,0,1)$\\
+\bottomrule
+\end{tabular}
+\caption{Four-colorings of representative edge deletions.}
+\label{tab:deletions}
+\end{table}
+
+Every edge deletion is therefore four-colorable. Every vertex has
+an incident edge, so every vertex deletion is four-colorable as
+well, by restricting a coloring of an incident-edge deletion.
+Every proper subgraph is contained in an edge or vertex deletion.
+Finally, $u$ and $v$ are nonadjacent, so $G$ is not complete.
+\end{proof}
+
+\section{The 4-critical subgraphs}
+
+We first record two elementary facts.
+
+\begin{lemma}\label{lem:five}
+Every graph on at most five vertices that is not three-colorable
+contains $K_4$.
+\end{lemma}
+
+\begin{proof}
+Suppose otherwise, and take a counterexample with the fewest
+vertices. Every vertex has degree at least three: otherwise a
+three-coloring after its deletion extends to the whole graph.
+A counterexample on four vertices would be $K_4$, so there are
+five vertices. Its complement has maximum degree at most one;
+its missing edges therefore form a matching. If there is at
+most one missing edge, the graph contains $K_4$. If there are two, give each
+nonadjacent pair one color and the remaining vertex a third.
+Both possibilities give a contradiction.
+\end{proof}
+
+\begin{lemma}\label{lem:spindles}
+For every three-element subset $T$ of $L\cup R$ and every
+two-element subset $P$ of $Z$, the induced graph
+\[
+ G[T\cup P\cup\{u,v\}]
+\]
+is a 4-critical Moser spindle.
+\end{lemma}
+
+\begin{proof}
+By symmetry, write $T=\{a,b,c\}$ with $a,b\in L$ and $c\in R$,
+and write $P=\{x,y\}$. The graph consists of two diamonds
+(copies of $K_4$ with one edge deleted), sharing the vertex $v$,
+together with one additional edge. The first diamond has
+vertices $\{a,b,c,v\}$ and nonadjacent terminals $c,v$.
+The second has vertices $\{x,y,u,v\}$ and nonadjacent terminals
+$u,v$. The additional edge is $cu$. This is the usual
+seven-vertex, eleven-edge description of the Moser spindle.
+
+In every three-coloring of a diamond, its terminals have the
+same color. The two diamonds would therefore force $c,v,u$
+to have the same color, contradicting the edge $cu$.
+
+For completeness, every edge deletion is three-colorable.
+Deleting $cu$ permits both diamonds to be colored with all
+three terminals equal. If an edge of a diamond is deleted,
+that diamond admits a three-coloring with different terminal
+colors. To check this last assertion, name the terminals $p,q$
+and the other vertices $r,s$. After deleting $rs$, use
+$(p,q,r,s)=(0,1,2,2)$. After deleting $pr$, use
+$(p,q,r,s)=(0,1,0,2)$. Symmetry covers the other three edges.
+
+Thus, after deleting an edge of either diamond, color its
+terminals differently and color the other diamond with equal
+terminals. Color permutations make the colorings agree at $v$;
+the edge $cu$ then has different endpoint colors. A
+three-coloring of an edge deletion also gives a four-coloring
+of the original graph by assigning one endpoint a fourth color.
+Every vertex has positive degree, so the edge-deletion checks
+imply colorability of every proper subgraph.
+\end{proof}
+
+\begin{proof}[Proof of Theorem~\ref{thm:main}]
+Lemma~\ref{lem:host} establishes the required properties of the
+host. Its copies of $K_4$ are exactly those induced by
+\[
+ L\cup R,\qquad Z\cup\{u\},\qquad Z\cup\{v\}.
+\]
+There are no edges between $L\cup R$ and $Z$, and $u,v$ are
+nonadjacent, so there are no other copies. Lemma~\ref{lem:spindles}
+gives twelve further induced 4-critical subgraphs, since there
+are $\binom43\binom32=12$ choices of $(T,P)$.
+We show that this list is exhaustive.
+
+Let $F$ be a 4-critical subgraph of $G$. If $F$ contains $K_4$,
+criticality forces $F$ to equal that $K_4$. Assume henceforth
+that $F$ contains no $K_4$.
+
+For the coloring argument, add any missing host vertices as
+isolated vertices. Split the edges of $F$ into a graph $X$ on
+$(L\cup R)\cup\{u,v\}$ and a graph $Y$ on $Z\cup\{u,v\}$.
+Their common vertex set consists of the independent terminals
+$u,v$. By Lemma~\ref{lem:five}, $Y$ is three-colorable.
+
+The graph $X$ has a three-coloring with $u$ and $v$ different.
+Indeed, some edge $ab$ is missing from its four-vertex clique
+side. Color $K_4-ab$ on $L\cup R$ by giving $a,b$ color $0$ and the
+other two vertices colors $1,2$. If $a,b$ lie in different parts,
+give $u$ the color of the remaining vertex of $L$ and $v$ the
+color of the remaining vertex of $R$. If $a,b\in L$, give
+$u$ color $0$ and $v$ color $1$; if $a,b\in R$, reverse these
+terminal assignments. These colorings respect all permitted
+terminal attachments and hence all edges of $X$.
+
+Two three-colorings of $X$ and $Y$ can be joined after a color
+permutation whenever they give the terminal pair the same
+equality relation. Since $F$ is not three-colorable and $X$
+permits different terminal colors, every three-coloring of $Y$
+must give $u,v$ the same color. Consequently $Y+uv$ is not
+three-colorable. Lemma~\ref{lem:five} gives a $K_4$ in $Y+uv$.
+It must use the added edge, because $Y$ contains no $K_4$.
+Thus $Y$ contains the diamond on $u,v$ and some pair
+$P\subset Z$.
+
+Since $Y$ is three-colorable with equal terminal colors, $X$
+cannot admit such a coloring. Identifying $u$ and $v$ in $X$
+therefore gives a non-three-colorable graph on five vertices.
+By Lemma~\ref{lem:five}, it contains $K_4$. This $K_4$ must
+contain the identified terminal, since the clique side of $X$
+contains no $K_4$. It follows that $X$ contains a triangle on
+some three-element subset $T\subset L\cup R$, together with
+the permitted terminal attachment of each of its vertices.
+The uniqueness of each vertex's permitted terminal neighbor
+justifies lifting these three edges from the identified graph.
+
+The triangle and these attachments, together with the diamond
+in $Y$, form precisely $G[T\cup P\cup\{u,v\}]$.
+Lemma~\ref{lem:spindles} shows that this is 4-critical.
+Criticality of $F$ forces equality. The fifteen listed
+subgraphs are distinct and induced, proving the theorem.
+\end{proof}
+
+\section{Formal verification}
+
+The Lean source and reproducible build instructions are at
+\begin{center}
+\url{https://github.com/alexgocardinal/jt58-critical-subgraphs}.
+\end{center}
+The repository is private during manuscript preparation.
+
+The formal theorem \texttt{JT58.jt58\_counterexample} proves
+5-criticality with respect to arbitrary proper subgraphs,
+noncompleteness, and the absence of a noninduced 4-critical
+subgraph. The formalization uses Lean~4.35.0 and does not
+require Mathlib. Explicit certificates check the edge and
+vertex deletions of the host. For the remaining assertion,
+a direct case proof covers all $2^{19}$ edge subsets using
+fifteen induced non-three-colorable cores and 264
+three-coloring certificates. Its 2,986 terminal branches
+are checked by Lean's kernel.
+
+Python scripts generate proof files, but their computations
+are not trusted premises. The checked-in Lean files suffice
+for verification. The axiom audit of the final theorem reports
+exactly
+\[
+  \texttt{propext},\qquad
+  \texttt{Classical.choice},\qquad
+  \texttt{Quot.sound}.
+\]
+The proof uses neither a placeholder axiom nor a
+native-computation axiom. Running \texttt{lake build}
+checks the formal counterexample theorem. The exact
+classification in Theorem~\ref{thm:main} is established
+by the elementary argument above.
+
+\begin{thebibliography}{9}
+
+\bibitem{JT}
+T.~R. Jensen and B.~Toft,
+\emph{Graph Coloring Problems},
+Wiley-Interscience, New York, 1995.
+\href{https://doi.org/10.1002/9781118032497.ch5}{Chapter 5}.
+
+\end{thebibliography}
+
+\end{document}
